@@ -2,7 +2,9 @@ package com.project.AmeDigital.resources;
 
 import com.project.AmeDigital.models.Planet;
 import com.project.AmeDigital.services.PlanetService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,12 +14,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/planets")
+@RequiredArgsConstructor
 public class PlanetResource {
 
-    @Autowired
-    PlanetService service;
+    private final PlanetService service;
 
-    @PostMapping("/new-planet")
+    @PostMapping("/new")
     public ResponseEntity<Planet> insert(@RequestBody Planet planet){
 
         planet = service.insert(planet);
@@ -29,28 +31,21 @@ public class PlanetResource {
 
     @GetMapping("/all")
     public ResponseEntity<List<Planet>> findAll(){
-
-        List<Planet> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Planet> findById(@PathVariable Long id){
-
-        Planet planet = service.findById(id);
-        return ResponseEntity.ok().body(planet);
+        return ResponseEntity.ok().body(service.findById(id));
     }
 
     @GetMapping("/{name}")
     public ResponseEntity<Planet> findByName(@PathVariable String name){
-
-        Planet planet = service.findByName(name);
-        return ResponseEntity.ok().body(planet);
+        return ResponseEntity.ok().body(service.findByName(name));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
-
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
