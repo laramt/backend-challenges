@@ -2,17 +2,18 @@ package com.project.AmeDigital.services;
 
 import com.project.AmeDigital.models.Planet;
 import com.project.AmeDigital.repositories.PlanetRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class PlanetService {
 
-    @Autowired
-    PlanetRepository repository;
+    private final PlanetRepository repository;
 
     public Planet insert (Planet planet){
         return repository.save(planet);
@@ -23,30 +24,25 @@ public class PlanetService {
     }
 
     public Planet findById(Long id){
-        Optional<Planet> optional = repository.findById(id);
-        Planet planet = optional.orElseThrow(
-                () -> new RuntimeException("Planet with id " + id + "not found."));
+        Planet planet = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Planet with id " + id + "not found."));
         return planet;
     }
 
     public Planet findByName(String name){
-        Optional<Planet> optional = repository.findByName(name);
-        Planet planet = optional.orElseThrow(
-                () -> new RuntimeException("Planet with name " + name + "not found."));
+        Planet planet = repository.findByName(name);
         return planet;
     }
 
     public void delete(Long id){
-        Optional<Planet> optional = repository.findById(id);
-        Planet planet = optional.orElseThrow(
-                () -> new RuntimeException("Planet with id " + id + "not found."));
+        repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Planet with id " + id + "not found."));
         repository.deleteById(id);
     }
 
     public Planet update(Long id, Planet planet){
-        Optional<Planet> optional = repository.findById(id);
-        Planet entity = optional.orElseThrow(
-                () -> new RuntimeException("Planet with id " + id + "not found."));
+         Planet entity = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Planet with id " + id + "not found."));
 
         entity.setName(planet.getName());
         entity.setTerrain(planet.getTerrain());
