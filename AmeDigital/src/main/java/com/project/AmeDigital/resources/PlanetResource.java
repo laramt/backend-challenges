@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,17 +17,12 @@ public class PlanetResource {
 
     private final PlanetService service;
 
-    @PostMapping("/new")
+    @PostMapping("/")
     public ResponseEntity<Planet> insert(@RequestBody Planet planet){
-
-        planet = service.insert(planet);
-
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(planet.getId()).toUri();
-        return ResponseEntity.created(uri).body(planet);
+        return ResponseEntity.created(null).body(service.insert(planet));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<List<Planet>> findAll(){
         return ResponseEntity.ok().body(service.findAll());
     }
@@ -39,8 +32,8 @@ public class PlanetResource {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<Planet> findByName(@PathVariable String name){
+    @GetMapping("/")
+    public ResponseEntity<Planet> findByName(@RequestParam String name){
         return ResponseEntity.ok().body(service.findByName(name));
     }
 

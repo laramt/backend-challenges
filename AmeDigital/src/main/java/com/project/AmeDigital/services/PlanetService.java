@@ -1,11 +1,14 @@
 package com.project.AmeDigital.services;
 
+import com.project.AmeDigital.dtos.SwapiResponse;
+import com.project.AmeDigital.dtos.PlanetResult;
 import com.project.AmeDigital.models.Planet;
 import com.project.AmeDigital.repositories.PlanetRepository;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -15,7 +18,8 @@ public class PlanetService {
 
     private final PlanetRepository repository;
 
-    public Planet insert (Planet planet){
+    public Planet insert(Planet planet){
+       planet.setFilmCount(getFilmCount(planet.getName()));
         return repository.save(planet);
     }
 
@@ -50,5 +54,27 @@ public class PlanetService {
 
         return repository.save(entity);
     }
+
+    public int getFilmCount(String planetName) {
+        RestTemplate restTemplate = new RestTemplate();
+        String planetUrl = "https://swapi.dev/api/planets/?search=" + planetName;
+        SwapiResponse swapiResponse = restTemplate.getForObject(planetUrl, SwapiResponse.class);
+
+        if (swapiResponse != null && !swapiResponse.getResults().isEmpty()) {
+            List<PlanetResult> planetResults = swapiResponse.getResults();
+            int filmCount = 0;
+
+            for (PlanetResult planetResult : planetResults) {
+                List<String> filmUrls = planetResult.getFilms();
+                filmCount += filmUrls.size();
+            }
+
+        return filmCount;
+    }
+
+    return 0;
+
+}
+
 
 }

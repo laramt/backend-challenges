@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -22,6 +20,6 @@ public class Planet {
     private String climate;
     @Column(nullable = false)
     private String terrain;
-    private List<String> movies = new ArrayList<>();
+    private int filmCount;
 
 }
